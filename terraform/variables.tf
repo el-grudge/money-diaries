@@ -1,5 +1,6 @@
 variable "project" {
   description = "Project"
+  # default   = [project-name]
 }
 
 variable "app_name" {
@@ -21,20 +22,24 @@ variable "container_memory" {
 variable "project_id" {
   type        = string
   description = "The name of the project"
+  # default = [project-id]
 }
 
 variable "region" {
   type        = string
   description = "The default compute region"
+  # default   = [region]
 }
 
 variable "zone" {
   type        = string
   description = "The default compute zone"
+  # default   = [us-central1-c]
 }
 
 variable "location" {
   description = "Project Location"
+  # default   = [location]
 }
 
 variable "repository" {
@@ -53,12 +58,13 @@ variable "database_password" {
   type        = string
   description = "The password of the Postgres database."
   sensitive   = true
+  # default   = [database_password]
 }
 
 variable "docker_image" {
   type        = string
   description = "The docker image to deploy to Cloud Run."
-  default     = "minasonbol/moneydiaries:magedlt"
+  default     = "minasonbol/moneydiaries:moneydiaries"
 }
 
 variable "domain" {
