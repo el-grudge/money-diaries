@@ -108,7 +108,7 @@ export GCP_LOCATION=[location]
 export DB_PASSWORD=[database_password]
 ```
 
-Note: The DB_PASSWORD parameter is for the Postgres database that will be used by Mage.ai's internal operations. The dashboard's data will be stored in a BigQuery dataset. 
+Note: The `DB_PASSWORD` parameter is for the Postgres database that will be used by Mage.ai's internal operations. The dashboard's data will be stored in a BigQuery dataset. 
 
 1. Provision cloud resources with terraform
 
