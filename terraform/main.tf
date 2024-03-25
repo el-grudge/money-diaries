@@ -113,10 +113,10 @@ resource "google_cloud_run_service" "run_service" {
           name = "path_to_keyfile"
           value = "/secrets/bigquery/bigquery_credentials"
         }
-	env {
-	  name = "project_id"
-	  value = var.project_id
-	}
+        env {
+          name = "project_id"
+          value = var.project_id
+        }
         volume_mounts {
           mount_path = "/secrets/bigquery"
           name       = "secret-bigquery-key"
@@ -256,4 +256,3 @@ output "service_ip" {
 # output "docs_service_ip" {
 #   value = google_compute_global_address.docs_ip.address
 # }
-
