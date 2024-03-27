@@ -10,6 +10,8 @@
 
 The blog is a rich source of data for anyone who wants to learn about how money shapes our lives. My goal is to create an interactive dashboard that summarizes some of the information in the blog such as salary distribution, prices over time, and debt vs. net worth. 
 
+The dashboard can be accessed [here](https://moneydiaries.streamlit.app/).
+
 #### Pipeline
 
 [pipeline image here]
@@ -77,9 +79,7 @@ Data transformation is handled by DBT. There are 3 stages:
 
 ## Dashboard
 
-[image](...)
-
-The dashboard can be accessed [here](...)
+[<img src="./images/dashboard.png" alt="dashboard" width="750"/>](https://moneydiaries.streamlit.app/)
 
 The dashboard has the following charts:
 * Number overlays showing ...
