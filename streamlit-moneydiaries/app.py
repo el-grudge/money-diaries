@@ -34,7 +34,7 @@ placeholder = st.empty()
 
 with placeholder.container():
     # Query to retrieve salary data
-    project_id = os.getenv("GOOGLE_PROJECT_ID")
+    project_id = st.secrets["gcp_service_account"]["project_id"]
     query = f"""
     select * FROM `{project_id}.money_diaries.analytics_categories_over_time`
     """
