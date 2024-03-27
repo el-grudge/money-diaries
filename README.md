@@ -10,7 +10,7 @@
 
 The blog is a rich source of data for anyone who wants to learn about how money shapes our lives. My goal is to create an interactive dashboard that summarizes some of the information in the blog such as salary distribution, prices over time, and debt vs. net worth. 
 
-### Pipeline
+#### Pipeline
 
 [pipeline image here]
 
@@ -24,6 +24,9 @@ The following cloud resources are provisioned using Terraform:
 See instructions in the Reproducibility section for details on how to deploy and run these resources.
 
 ## Data ingestion
+
+![dag](./images/mage_dag.png)
+
 Data is ingested using a pipelines are created in Mage.ai. 
 
 The DAG steps are:
@@ -37,13 +40,40 @@ The DAG steps are:
 
 ## Data warehouse
 
-BigQuery dataware
+The ingested data is stored in a BigQuery data warehouse. DBT is used to create optimized versions of the tables that host the data that will be used by the dashboard.
 
-...
+DBT supports paritioning and clustering for BigQuery using the following format:
+
+```lua
+{{ config(
+    materialized="incremental",
+    partition_by={
+      "field": "created_date",
+      "data_type": "timestamp",
+      "granularity": "day",
+      "time_ingestion_partitioning": true
+    }, 
+    cluster_by = ["customer_id", "order_id"]
+) }}
+
+select
+  user_id,
+  event_name,
+  created_at,
+  -- values of this column must match the data type + granularity defined above
+  timestamp_trunc(created_at, day) as created_date
+
+from {{ ref('events') }}
+```
 
 ## Transformations
 
-...
+<img src="./images/dbt_pipeline.png" alt="dbt" width="750"/>
+
+Data transformation is handled by DBT. There are 3 stages:
+1. Staging: The four tables that will stage the data for the dashboard are created and optimized (using clustering and partitioning) 
+2. Core: The tables are joined together to create one source of truth table that will be used for reporting
+3. Reporting: Three views are created to serve data to the dashboard charts
 
 ## Dashboard
 
@@ -64,10 +94,11 @@ The dashboard has the following charts:
 
 ### Prerequisite
 
-1. [Docker](https://docs.docker.com/engine/install/)
-2. [terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
-3. [dbt](https://docs.getdbt.com/docs/core/connect-data-platform/bigquery-setup)
-4. GCP account
+1. [GCloud](https://cloud.google.com/sdk/docs/install)
+2. GCP account
+3. [Docker](https://docs.docker.com/engine/install/)
+4. [terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
+5. [dbt](https://docs.getdbt.com/docs/core/connect-data-platform/bigquery-setup)
 
 ### Permissions
 
@@ -112,6 +143,12 @@ Note: The `DB_PASSWORD` parameter is for the Postgres database that will be used
 
 1. Provision cloud resources with terraform
 
+*OAUTH*
+```bash
+gcloud init
+gcloud auth application-default login
+```
+
 *terraform init* 
 ```bash
 cd terraform \
@@ -125,7 +162,8 @@ terraform plan \
   -var="project_id=${GOOGLE_PROJECT_ID}" \
   -var="region=${GCP_REGION}" \
   -var="zone=${GCP_ZONE}" \
-  -var="location=${GCP_LOCATION}"
+  -var="location=${GCP_LOCATION}" \
+  -var="database_password=${DB_PASSWORD}"
 ```
 
 *terraform apply*
@@ -135,7 +173,8 @@ terraform apply \
   -var="project_id=${GOOGLE_PROJECT_ID}" \
   -var="region=${GCP_REGION}" \
   -var="zone=${GCP_ZONE}" \
-  -var="location=${GCP_LOCATION}"
+  -var="location=${GCP_LOCATION}" \
+  -var="database_password=${DB_PASSWORD}"
 ```
 
 Terraform will deploy Mage.ai as a Google Clound Run service, which you can access by navigating to the Cloud Run option on the left navigation menu. On the service details page, you'll find the URL of the running service listed under the "Service URL" section. Copy & go to this URL to find the Mage.ai service
@@ -159,5 +198,26 @@ terraform destroy \
   -var="project_id=${GOOGLE_PROJECT_ID}" \
   -var="region=${GCP_REGION}" \
   -var="zone=${GCP_ZONE}" \
-  -var="location=${GCP_LOCATION}"
+  -var="location=${GCP_LOCATION}" \
+  -var="database_password=${DB_PASSWORD}"
 ```
+
+2. DBT
+
+```bash
+gcloud auth application-default login \
+  --scopes=https://www.googleapis.com/auth/bigquery,\
+https://www.googleapis.com/auth/drive.readonly,\
+https://www.googleapis.com/auth/iam.test
+```
+
+```bash
+dbt init
+```
+
+```bash
+dbt build
+```
+
+dbt deps --add-package dbt-labs/dbt_utils@1.0.0
+

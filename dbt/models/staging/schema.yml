@@ -1,0 +1,12 @@
+version: 2
+
+sources:
+  - name: staging
+    database: linen-source-411501
+    schema: money_diaries
+
+      # loaded_at_field: record_loaded_at
+    tables:
+      - name: blog_entry
+      - name: blog_entry__result__content__entries
+      - name: blog_entry__result__content__entries__sections__body

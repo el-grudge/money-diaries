@@ -1,0 +1,14 @@
+my_bigquery_db:
+  outputs:
+    dev:
+      dataset: money_diaries
+      job_execution_timeout_seconds: 600
+      job_retries: 1
+      location: US
+      maximum_bytes_billed: 1000000000
+      method: oauth
+      priority: interactive
+      project: linen-source-411501
+      threads: 4
+      type: bigquery
+  target: dev

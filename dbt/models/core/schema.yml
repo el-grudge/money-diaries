@@ -1,0 +1,5 @@
+version: 2
+
+models:
+  - name: reporting_blog_content_metrics
+    description: the source of truth table for reporting purposes, all other views references this table
