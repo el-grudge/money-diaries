@@ -1,12 +1,23 @@
 import streamlit as st
 from google.cloud import bigquery
+from google.oauth2 import service_account
 import altair as alt
 import pandas as pd
 import os
 
+# # authenticate gcloud 
+# keyfile = st.secrets["GOOGLE_ACCOUNT_CREDENTIALS"]
+# credentials = service_account.Credentials.from_service_account_file(keyfile)
+# scoped_credentials = credentials.with_scopes(['https://www.googleapis.com/auth/cloud-platform'])
+# 
+# # Initialize BigQuery client
+# client = bigquery.Client()
 
-# Initialize BigQuery client
-client = bigquery.Client()
+# Create API client.
+credentials = service_account.Credentials.from_service_account_info(
+    st.secrets["gcp_service_account"]
+)
+client = bigquery.Client(credentials=credentials)
 
 st.set_page_config(
     page_title = 'Money Diaries',
