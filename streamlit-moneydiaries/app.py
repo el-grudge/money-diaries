@@ -5,14 +5,6 @@ import altair as alt
 import pandas as pd
 import os
 
-# # authenticate gcloud 
-# keyfile = st.secrets["GOOGLE_ACCOUNT_CREDENTIALS"]
-# credentials = service_account.Credentials.from_service_account_file(keyfile)
-# scoped_credentials = credentials.with_scopes(['https://www.googleapis.com/auth/cloud-platform'])
-# 
-# # Initialize BigQuery client
-# client = bigquery.Client()
-
 # Create API client.
 credentials = service_account.Credentials.from_service_account_info(
     st.secrets["gcp_service_account"]
@@ -94,8 +86,8 @@ with placeholder.container():
             alt.X("salary:Q", bin=alt.Bin(maxbins=12), title="Salary"),
             alt.Y('count():Q', title="Frequency"),
         ).properties(
-            width=600,
-            height=400
+            width=750,
+            height=550
         ).configure_axis(
             labelFontSize=12,
             titleFontSize=14
@@ -125,13 +117,34 @@ with placeholder.container():
 
         # Plotting line charts using Altair
         st.markdown("### Prices over time")
-        # Create the line chart
+
+        # Define colors for each category
+        # category_colors = {
+        #     'food_drink': '#030637',
+        #     'entertainment': '#3C0753',
+        #     'home_health': '#720455',
+        #     'clothes_beauty': '#910A67',
+        #     'transportation': '#FFD1E3',
+        #     'other': '#A367B1'
+        # }
+
+        # Define colors for each category
+        category_colors = {
+            'food_drink': '#2bfb2b',
+            'entertainment': '#2be4fb',
+            'home_health': '#2b2bfb',
+            'clothes_beauty': '#fb2be4',
+            'transportation': '#fb2b2b',
+            'other': '#fbe42b'
+        }
+
         # Create individual charts for each category
         charts = []
         for category in col_names[1:]:
             chart = alt.Chart(df_melted[df_melted['category'] == category]).mark_line().encode(
                 x='published_date:T',
-                y='value:Q'
+                y='value:Q',
+                color=alt.Color('category:N', scale=alt.Scale(range=list(category_colors.values())), legend=None)
             ).properties(
                 width=200,
                 height=150,
@@ -142,3 +155,55 @@ with placeholder.container():
         # Combine charts into a grid
         facet = alt.vconcat(alt.hconcat(*charts[:3], spacing=20), alt.hconcat(*charts[3:], spacing=20), spacing=20)
         st.write(facet)
+
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        # Query to retrieve salary data
+        query = f"""
+        select * FROM `{project_id}.money_diaries.analytics_debt_worth`
+        """
+        # Execute the query
+        query_job = client.query(query)
+        # Convert the results to a Pandas DataFrame
+        results = query_job.result()
+        df = results.to_dataframe()
+        df['debt'] = -1*df['debt'].str.extract('(\d+,?\d+)')[0].str.replace(',','').astype(float)
+        df['net_worth'] = df['net_worth'].str.extract('(-?.?\d+,?\d+)')[0].str.replace(',','').str.replace('$','').astype(float)
+
+        # Define a function to create age groups
+        def create_age_group(age):
+            if pd.isna(age):
+                return pd.NA
+            else:
+                return f"{(age // 5) * 5}-{((age // 5) * 5) + 4}"
+                
+        df['age_group'] = df['age'].apply(create_age_group)
+        
+        col_names = ['age_group','debt','net_worth']
+        df = df[col_names]
+        
+        df_melted = df[col_names].melt(id_vars='age_group', var_name='category', value_name='value').groupby(['age_group', 'category']).agg({'value': 'mean'}).reset_index()
+
+        title = 'Net worth / debt per age group'
+        subtitle = 'Debt' + ' '*10 + 'Net Wealth'
+
+        # Create the chart
+        chart = alt.Chart(df_melted).mark_bar().encode(
+            x=alt.X('value:Q', axis=alt.Axis(title='Value')),
+            y=alt.Y('age_group:N', axis=alt.Axis(title='Age Group')),
+            color=alt.Color('category:N', scale=alt.Scale(domain=['net_worth', 'debt'], range=['#182760', '#fb08d3']), legend=None),
+            tooltip=['value:Q']
+        ).properties(
+            width=850,
+            height=650
+        ).configure_axis(
+            grid=False
+        )
+
+        # Combine chart and text
+        divergent_bar_chart = (chart)
+
+        # Show the chart
+        title = 'Net worth / debt per age group'
+        st.markdown(f"<h3 style='text-align: center;'>{title}</h1>", unsafe_allow_html=True)  # Center-align 
+        st.altair_chart(chart, use_container_width=True)
