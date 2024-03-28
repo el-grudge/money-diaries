@@ -198,6 +198,8 @@ terraform destroy \
   -var="database_password=${DB_PASSWORD}"
 ```
 
+Note: Sometimes resources take a bit too long to be destroyed, which may interrupt the destroy operation. If you see an error such as "role 'xyz' cannot be dropped because some objects depend on it" or "'resource' is still in use", wait a few minutes then rerun the `terraform destroy` command.
+
 2. DBT
 
 ... might not be needed, confirm in testing phase

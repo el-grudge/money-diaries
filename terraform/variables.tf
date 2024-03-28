@@ -22,7 +22,7 @@ variable "container_memory" {
 variable "project_id" {
   type        = string
   description = "The name of the project"
-  # default   = [project-id]
+  # default = [project-id]
 }
 
 variable "region" {
@@ -39,7 +39,7 @@ variable "zone" {
 
 variable "location" {
   description = "Project Location"
-  # default   = [location]
+  # default = [location] 
 }
 
 variable "repository" {

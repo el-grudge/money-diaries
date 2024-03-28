@@ -154,7 +154,6 @@ resource "google_cloud_run_service" "run_service" {
   metadata {
     annotations = {
       "run.googleapis.com/launch-stage" = "BETA"
-      # "run.googleapis.com/ingress"      = "internal-and-cloud-load-balancing"
       "run.googleapis.com/ingress"      = "all"
     }
   }
@@ -169,6 +168,7 @@ resource "google_cloud_run_service" "run_service" {
 resource "google_bigquery_dataset" "demo_dataset" {
   dataset_id = var.bq_dataset_name
   location   = var.location
+  delete_contents_on_destroy = true
 }
 
 # Allow unauthenticated users to invoke the service
@@ -182,6 +182,10 @@ resource "google_cloud_run_service_iam_member" "run_all_users" {
 # Display the service IP
 output "service_ip" {
   value = module.lb-http.external_ip
+}
+
+output "service_url" {
+  value = google_cloud_run_service.run_service.status[0].url
 }
 
 # ----------------------------------------------------------------------------------------
