@@ -117,17 +117,7 @@ with placeholder.container():
 
         # Plotting line charts using Altair
         st.markdown("### Prices over time")
-
-        # Define colors for each category
-        # category_colors = {
-        #     'food_drink': '#030637',
-        #     'entertainment': '#3C0753',
-        #     'home_health': '#720455',
-        #     'clothes_beauty': '#910A67',
-        #     'transportation': '#FFD1E3',
-        #     'other': '#A367B1'
-        # }
-
+        
         # Define colors for each category
         category_colors = {
             'food_drink': '#2bfb2b',
