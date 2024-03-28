@@ -6,11 +6,9 @@
 * The second section covers their monthly expenses
 * The third section is a list of background questions
 * The fourth section is the diary, where the contributor tracks and shares their money spending for a week
-* The fifth and final section is the breadkown, in which all their spending is aggregated into six cateogries: Food+Drink, Home+Health, Clothes+Beauty, Entertainment, Transport, Other
+* The fifth and final section is the breadkown, where all their spending is aggregated into six cateogries: Food & Drink, Home & Health, Clothes & Beauty, Entertainment, Transport, Other
 
-The blog is a rich source of data for anyone who wants to learn about how money shapes our lives. My goal is to create an interactive dashboard that summarizes some of the information in the blog such as salary distribution, prices over time, and debt vs. net worth. 
-
-The dashboard can be accessed [here](https://moneydiaries.streamlit.app/).
+The blog is a rich source of data for anyone who wants to learn about how money shapes our lives. I built a dashboard that summarizes some of the information in the blog such as salary distribution, prices over time, and debt vs. net worth. The dashboard can be accessed [here](https://moneydiaries.streamlit.app/).
 
 #### Pipeline
 
@@ -204,6 +202,7 @@ terraform destroy \
 
 2. DBT
 
+... might not be needed, confirm in testing phase
 ```bash
 gcloud auth application-default login \
   --scopes=https://www.googleapis.com/auth/bigquery,\
@@ -216,8 +215,45 @@ dbt init
 ```
 
 ```bash
+dbt deps
+```
+
+```bash
 dbt build
 ```
 
-dbt deps --add-package dbt-labs/dbt_utils@1.0.0
+3. Dashboard
 
+Rename the streamlit directory
+
+```bash
+mv streamlit .streamlit
+```
+
+The .streamlit directory has the secrets.toml file which contains the Google cloud credentials that will be used to connect to BigQuery.
+
+Modify the contents of the key file by adding the values from the keys JSON file
+
+```
+# .streamlit/secrets.toml
+
+[gcp_service_account]
+type = "service_account"
+project_id = "xxx"
+private_key_id = "xxx"
+private_key = "xxx"
+client_email = "xxx"
+client_id = "xxx"
+auth_uri = "https://accounts.google.com/o/oauth2/auth"
+token_uri = "https://oauth2.googleapis.com/token"
+auth_provider_x509_cert_url = "https://www.googleapis.com/oauth2/v1/certs"
+client_x509_cert_url = "xxx"
+```
+
+Now, the dashboard can be launched by running the following command:
+
+```bash
+streamlit run streamlit-moneydiaries/app.py
+```
+
+To view the dashboard, go to https://localhost:8501
