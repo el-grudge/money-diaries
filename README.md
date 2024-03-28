@@ -12,7 +12,7 @@ The blog is a rich source of data for anyone who wants to learn about how money 
 
 #### Pipeline
 
-[pipeline image here]
+<img src="./images/pipeline.png" alt="dbt" width="750"/>
 
 ...
 
@@ -30,11 +30,9 @@ See instructions in the Reproducibility section for details on how to deploy and
 Data is ingested using a pipelines are created in Mage.ai. 
 
 The DAG steps are:
-1. Scrap the blog home page and load it's json objects in BigQuery using `dlt`*
+1. Scrap the blog's home page* and load it's json objects in BigQuery using `dlt`
 2. Extract the blog urls from "diary_links__rows__entities" table
 3. Scrap the blog posts and load their json contents in BigQuery using `dlt`
-
-[dag image here]
 
 \* Note: Refinery29 webstie's robot.txt file has no explicit restrictions on scrapping the Money Diaries blog posts. You can check it [here](https://www.refinery29.com/robots.txt)
 
