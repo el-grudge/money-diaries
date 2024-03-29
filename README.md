@@ -10,11 +10,11 @@
 
 The blog is a rich source of data for anyone who wants to learn about how money shapes our lives. I built a dashboard that summarizes some of the information in the blog such as salary distribution, prices over time, and debt vs. net worth. The dashboard can be accessed [here](https://moneydiaries.streamlit.app/).
 
-#### Pipeline
+### Pipeline  
+
 
 <img src="./images/pipeline-hd.png" alt="dbt" />
 
-...
 
 ## Cloud
 The following cloud resources are provisioned using Terraform:
