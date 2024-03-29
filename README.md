@@ -12,9 +12,7 @@ The blog is a rich source of data for anyone who wants to learn about how money 
 
 ### Pipeline  
 
-
-<img src="./images/pipeline-hd.png" alt="dbt" />
-
+<img src="./images/pipeline-bg.png" alt="dataset" width="750"/>
 
 ## Cloud
 The following cloud resources are provisioned using Terraform:
@@ -25,7 +23,7 @@ See instructions in the Reproducibility section for details on how to deploy and
 
 ## Data ingestion
 
-![dag](./images/mage_dag-removebg-preview.png)
+![dag](./images/mage_dag.png)
 
 Data is ingested using a pipelines are created in Mage.ai. 
 
