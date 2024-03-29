@@ -96,7 +96,7 @@ if __name__ == "__main__":
             st.markdown("### Salary distribution")
             # Plotting the histogram using Altair
             histogram_chart = alt.Chart(df).mark_bar(color='#e4fb2d').encode(
-                alt.X("salary:Q", bin=alt.Bin(maxbins=20), title="Salary"),
+                alt.X("salary:Q", bin=alt.Bin(maxbins=50), title="Salary"),
                 alt.Y('count():Q', title="Frequency"),
             ).properties(
                 width=750,
@@ -120,8 +120,10 @@ if __name__ == "__main__":
             df['published_date'] = pd.to_datetime(df['published_date'])
             col_names = ['published_date', 'food_drink', 'entertainment', 'home_health', 'clothes_beauty', 'transportation', 'other']
             df = df[col_names]
-            df = df[df['food_drink'].notnull()] # remove this line after implementing google vision extraction 
-
+            df['month'] = df['published_date'].dt.to_period('M')
+            
+            # Group by 'month' and calculate mean
+            df = df.groupby('month').mean()
             df_melted = df.melt(id_vars='published_date', var_name='category', value_name='value')
 
             # Plotting line charts using Altair
