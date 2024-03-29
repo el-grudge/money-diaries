@@ -32,7 +32,7 @@ The DAG steps are:
 2. Extract the blog urls from "diary_links__rows__entities" table
 3. Scrap the blog posts and load their json contents in BigQuery using `dlt`
 
-\* Note: Refinery29 webstie's robot.txt file has no explicit restrictions on scrapping the Money Diaries blog posts. You can check it [here](https://www.refinery29.com/robots.txt)
+\* Refinery29 webstie's robot.txt file has no explicit restrictions on scrapping the Money Diaries blog posts. You can check it [here](https://www.refinery29.com/robots.txt)
 
 ## Data warehouse
 
@@ -115,7 +115,6 @@ The dashboard has the following charts:
 
 1. Clone the repo 
 
-
 ```bash
 git clone https://github.com/el-grudge/money-diaries.git 
 ```
@@ -133,9 +132,11 @@ export GCP_LOCATION=[location]
 export DB_PASSWORD=[database_password]
 ```
 
-Note: The `DB_PASSWORD` parameter is for the Postgres database that will be used by Mage.ai's internal operations. The dashboard's data will be stored in a BigQuery dataset. 
+⚠️ Note: The `DB_PASSWORD` parameter is for the Postgres database that will be used by Mage.ai's internal operations. The dashboard's data will be stored in a BigQuery dataset. 
 
 1. Provision cloud resources with terraform
+
+⚠️ Note: Before running these commands, please note that these resources are not free, Google Cloud will charge you for running these services. I recommend creating a new GCP account and use the free credits. You can also read more on Google Cloud billing [here](https://cloud.google.com/billing/docs/onboarding-checklist).
 
 *OAUTH*
 ```bash
@@ -196,7 +197,7 @@ terraform destroy \
   -var="database_password=${DB_PASSWORD}"
 ```
 
-Note: Sometimes resources take a bit too long to be destroyed, which may interrupt the destroy operation. If you see an error such as "role 'xyz' cannot be dropped because some objects depend on it" or "'resource' is still in use", wait a few minutes then rerun the `terraform destroy` command.
+⚠️ Note: Sometimes resources take a bit too long to be destroyed, which may interrupt the destroy operation. If you see an error such as "role 'xyz' cannot be dropped because some objects depend on it" or "'resource' is still in use", wait a few minutes then rerun the `terraform destroy` command. If that does not fix it, you may need to delete the resources manually.
 
 2. DBT
 
@@ -220,12 +221,16 @@ dbt deps
 dbt build
 ```
 
+```bash
+dbt run
+```
+
 3. Dashboard
 
 Rename the streamlit directory
 
 ```bash
-mv streamlit .streamlit
+mv streamlit-secrets .streamlit
 ```
 
 The .streamlit directory has the secrets.toml file which contains the Google cloud credentials that will be used to connect to BigQuery.

@@ -91,12 +91,12 @@ if __name__ == "__main__":
             """
             # Execute the query and convert the results to a Pandas DataFrame
             df = pd.DataFrame(run_query(query))
-            df['salary'] = df['salary'].str.extract('(\d+,?\d+)')[0].str.replace(',','').astype(float)
+            df['salary'] = df['salary'].str.extract('(\d+,?\d+)')[0].str.replace(',','').str.replace('~','').astype(float)
 
             st.markdown("### Salary distribution")
             # Plotting the histogram using Altair
             histogram_chart = alt.Chart(df).mark_bar(color='#e4fb2d').encode(
-                alt.X("salary:Q", bin=alt.Bin(maxbins=12), title="Salary"),
+                alt.X("salary:Q", bin=alt.Bin(maxbins=20), title="Salary"),
                 alt.Y('count():Q', title="Frequency"),
             ).properties(
                 width=750,
@@ -164,7 +164,7 @@ if __name__ == "__main__":
             # Execute the query and convert the results to a Pandas DataFrame
             df = pd.DataFrame(run_query(query))
             df['debt'] = -1*df['debt'].str.extract('(\d+,?\d+)')[0].str.replace(',','').astype(float)
-            df['net_worth'] = df['net_worth'].str.extract('(-?.?\d+,?\d+)')[0].str.replace(',','').str.replace('$','').astype(float)
+            df['net_worth'] = df['net_worth'].str.extract('(-?.?\d+,?\d+)')[0].str.replace(',','').str.replace('$','').str.replace('~','').str.replace('/','').astype(float)
             df['age_group'] = df['age'].apply(create_age_group)
 
             col_names = ['age_group','debt','net_worth']
