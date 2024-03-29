@@ -8,7 +8,7 @@ my_bigquery_db:
       maximum_bytes_billed: 1000000000
       method: oauth
       priority: interactive
-      project: linen-source-411501
+      project: "{{ env_var('GOOGLE_PROJECT_ID') }}"
       threads: 4
       type: bigquery
   target: dev

@@ -2,7 +2,7 @@ version: 2
 
 sources:
   - name: staging
-    database: linen-source-411501
+    database: "{{ env_var('GOOGLE_PROJECT_ID') }}"
     schema: money_diaries
 
       # loaded_at_field: record_loaded_at

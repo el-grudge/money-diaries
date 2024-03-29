@@ -4,6 +4,23 @@ from google.oauth2 import service_account
 import altair as alt
 import pandas as pd
 import os
+import subprocess
+
+
+def is_gcloud_authenticated():
+    try:
+        # Run gcloud auth list command
+        result = subprocess.run(['gcloud', 'auth', 'list'], capture_output=True, text=True)
+        
+        # Check if the output contains "ACTIVE" which indicates authentication
+        if "ACTIVE" in result.stdout:
+            return True
+        else:
+            return False
+    except FileNotFoundError:
+        # Handle case where gcloud command is not found
+        print("gcloud command not found. Please make sure gcloud SDK is installed and configured.")
+        return False
 
 
 @st.cache_data(ttl=600)
@@ -25,11 +42,17 @@ def create_age_group(age):
 
 if __name__ == "__main__":
 
-    # Create API client.
-    credentials = service_account.Credentials.from_service_account_info(
-        st.secrets["gcp_service_account"]
-    )
-    client = bigquery.Client(credentials=credentials)
+    if is_gcloud_authenticated():
+        print("gcloud is authenticated.")
+        client = bigquery.Client()
+        project_id = os.getenv("GOOGLE_PROJECT_ID")
+    else:
+        # Create API client.
+        credentials = service_account.Credentials.from_service_account_info(
+            st.secrets["gcp_service_account"]
+        )
+        client = bigquery.Client(credentials=credentials)
+        project_id = st.secrets["gcp_service_account"]["project_id"]
 
     st.set_page_config(
         page_title = 'Money Diaries',
@@ -46,7 +69,6 @@ if __name__ == "__main__":
 
     with placeholder.container():
         # Query to retrieve salary data
-        project_id = st.secrets["gcp_service_account"]["project_id"]
         query = f"""
         select * FROM `{project_id}.money_diaries.analytics_categories_over_time`
         """

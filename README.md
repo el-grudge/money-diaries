@@ -65,6 +65,8 @@ The dashboard has the following charts:
 
 ## Reproducibility
 
+⚠️ Note: Before running these commands, please note that these resources are not free, Google Cloud will charge you for running these services. I recommend creating a new GCP account and using the free credits to run this pipeline. You can read more on Google Cloud billing [here](https://cloud.google.com/billing/docs/onboarding-checklist).
+
 ### Prerequisite
 
 Make sure that the following tools are installed:
@@ -74,6 +76,7 @@ Make sure that the following tools are installed:
 3. [terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
 4. [Docker](https://docs.docker.com/engine/install/)
 5. [dbt](https://docs.getdbt.com/docs/core/connect-data-platform/bigquery-setup)
+6. [Streamlit](https://docs.streamlit.io/get-started/installation)
 
 ### Permissions
 
@@ -109,9 +112,38 @@ Make sure that the following APIs are enabled:
 
 ...
 
-### Run 
+### BigQuery Credentials
 
-⚠️ Note: Before running these commands, please note that these resources are not free, Google Cloud will charge you for running these services. I recommend creating a new GCP account and using the free credits to run this pipeline. You can read more on Google Cloud billing [here](https://cloud.google.com/billing/docs/onboarding-checklist).
+To allow Mage.ai to access your BigQuery you will need to create a BigQuery credentials secret file that will be provisioned to the the Cloud Run service running Mage.ai. To create the credentials files follow these instructions: 
+
+create key   
+- iam  
+- service accounts
+- click on service account 
+- keys tab 
+- create key
+- json file downloaded
+
+create secret
+- security
+- secret manager
+- create secret
+- in name enter "bigquery_credentials"
+- upload json key file
+
+grant permission
+- click on newly created secret
+- permissions tab
+- grant access
+- add principal - add your service account
+- choose role
+- click save
+
+<gif>
+
+...
+
+### Run 
 
 **1. Clone the repo**
 
@@ -137,7 +169,7 @@ export DB_PASSWORD="database_password"
 **3. Provision cloud resources with terraform**
 
 
-*OAUTH*
+*Authentication*
 ```bash
 gcloud init
 gcloud auth application-default login
@@ -175,13 +207,13 @@ Terraform will deploy Mage.ai as a Google Clound Run service, and the `terraform
 
 ![mage_url](./images/mage-url.png)
 
-In the `main.tf` file, access to the Mage.ai service is configured to accept external traffic by default. To disable external traffic navigate to the Cloud Run option on the left navigation menu, go the Networking tab, then choose ...
+In the `main.tf` file, access to the Mage.ai service is configured to accept external traffic by default. To disable external traffic navigate to Cloud Run on the left navigation menu, click on the mage-data-prep service, go to the Networking tab, then under Ingress Control choose Internal, and click Save.
 
 <gif>
 
 <img src="./images/cloud_run.gif" alt="cloud run" width="750"/>
 
-When you go to the Mage.ai service url, you'll find the money_diaries pipeline already created. To run the pipeline, click on it, that will take to the triggers page, where you will find the Run@Once button. Press on it, then press on the Run Now button in the Run Pipeline Now pop-up window. You can view the log of the current run by going to Run on the left navigation menu and clicking on the logs logo next to the Running pipeline
+When you go to the Mage.ai service url, you'll find the money_diaries pipeline already created. To run the pipeline, click on it. You will be taken to the triggers page, where you will find the Run@Once button (the middle button in the upper panel). Press on it, then press on the Run Now button in the Run Pipeline Now pop-up window. You can view the log of the current run by going to Runs on the left navigation menu and clicking on the logs logo next to the Running pipeline
 
 <img src="./images/pipeline_run.gif" alt="pipeline" width="750"/>
 
@@ -208,6 +240,8 @@ terraform destroy \
 
 ℹ️ Tip: If you've already authenticated your gcloud account for terraform you can skip the dbt authentication step.
 
+*Authentication*
+
 ```bash
 gcloud auth application-default login \
   --scopes=https://www.googleapis.com/auth/bigquery,\
@@ -215,33 +249,35 @@ https://www.googleapis.com/auth/drive.readonly,\
 https://www.googleapis.com/auth/iam.test
 ```
 
-Initiate dbt
+*Initiate dbt*
 
 ```bash
 dbt init
 ```
 
-Install dbt packages
+*Install dbt packages*
 
 ```bash
 dbt deps
 ```
 
-Build the models
+*Build the models*
 
 ```bash
-dbt build
+dbt build --vars '{'is_test_run': 'false'}'
 ```
 
-Run the models
+*Run the models*
 
 ```bash
-dbt run
+dbt run --vars '{'is_test_run': 'false'}'
 ```
 
 **5. Dashboard**
 
-ℹ️ Tip: If you've already authenticated your gcloud account, and you're running the dashboard locally in the same session and don't plan to deploy the dashboard to the cloud, then you don't need to modify the secrets file.
+ℹ️ Tip: If you've already authenticated your gcloud account, and you're running the dashboard locally in the same session and don't plan to deploy it to the cloud, then you can skip the authentication step, otherwise follow the authentication instructions below.
+
+*Authentication*
 
 Rename the streamlit directory
 
@@ -269,6 +305,8 @@ token_uri = "https://oauth2.googleapis.com/token"
 auth_provider_x509_cert_url = "https://www.googleapis.com/oauth2/v1/certs"
 client_x509_cert_url = "xxx"
 ```
+
+*Run*
 
 Now, the dashboard can be launched by running the following command:
 
