@@ -12,7 +12,7 @@ The blog is a rich source of data for anyone who wants to learn about how money 
 
 #### Pipeline
 
-<img src="./images/pipeline.png" alt="dbt" width="750"/>
+<img src="./images/pipeline-hd.png" alt="dbt" />
 
 ...
 
@@ -25,7 +25,7 @@ See instructions in the Reproducibility section for details on how to deploy and
 
 ## Data ingestion
 
-![dag](./images/mage_dag.png)
+![dag](./images/mage_dag-removebg-preview.png)
 
 Data is ingested using a pipelines are created in Mage.ai. 
 
