@@ -1,7 +1,7 @@
 # Money Diaries
 
 ## Problem Description 
-[Money Diaries](https://www.refinery29.com/en-us/money-diary) is a blog created and hosted by the Refinery29. The blog's first post came out in 2016, and each week there are 3 new posts. In each post an anonymous contributor writes about their money spending habits. All posts have a similar structure:
+[Money Diaries](https://www.refinery29.com/en-us/money-diary) is a blog created and hosted by Refinery29. The blog's first post came out in 2016, and each week three new anonymous contributes post about their money spending habits. All posts have a similar structure:
 * The first section has information on the contributor's occupation, the industry they work in, their age, location, salary, net worth, debt, paycheck amount and cadence, and their pronouns
 * The second section covers their monthly expenses
 * The third section is a list of background questions
@@ -59,7 +59,7 @@ The dbt pipeline involves three stages:
 
 ## Dashboard
 
-[<img src="./images/dashboard-new.png" alt="dashboard" width="750"/>](https://moneydiaries.streamlit.app/)
+[<img src="./images/dashboard-text.png" alt="dashboard" width="750"/>](https://moneydiaries.streamlit.app/)
 
 The dashboard has the following charts:
 * Metric overlays showing average prices per category for the most recent month, with the delta from the month prior 
@@ -73,3 +73,10 @@ The dashboard has the following charts:
 
 To recreate this dashboard, follow the instructions [here](./docs/instructions.md)
 
+## Next steps
+
+1. Create a streaming pipeline that extracts new posts
+2. Create unit tests for all steps
+3. Build a second pipeline that uses OCR to extract breakdown data (the scrapped data has a lot of null values)
+4. Add filters to the dashoard
+5. Use the stored data to build a financial RAG 

@@ -66,44 +66,68 @@ if __name__ == "__main__":
     # creating a single-element container.
     placeholder = st.empty()
 
-
     with placeholder.container():
-        # Query to retrieve salary data
-        query = f"""
-        select * FROM `{project_id}.money_diaries.analytics_categories_over_time`
-        """
-        # Execute the query and convert the results to a Pandas DataFrame
-        df = pd.DataFrame(run_query(query))
+        col1, col2, col3 = st.columns([1, 0.15, 1])
+        with col1:
+            st.markdown(
+                """
+                <br> <!-- Empty new line -->
+                <div style="font-size: 20px;">
+                    <a href="https://www.refinery29.com/en-us/money-diary" style="color: blue; text-decoration: underline;">Money Diaries</a> is a blog created and hosted by Refinery29. The blog's first post came out in 2016, and each week three new anonymous contributes post about their money spending habits. The blog is a rich source for anyone who wants to learn about how money shapes our lives, whether the disconnect between financial reports and people's sentiment about inflation can be backed by data, salary distribution, and debt / net worth ratio. I hope you find it useful
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
 
-        # Convert 'published_date' to datetime
-        df = df[df['food_drink'].notnull()] # remove this line after implementing google vision extraction 
-        df['published_date'] = pd.to_datetime(df['published_date'])
-        current_month = df['published_date'].max() - pd.DateOffset(months=1)
-        previous_month = current_month - pd.DateOffset(months=1)
+            # Decrease column width
+            st.markdown(
+                """
+                <style>
+                    .reportview-container .main .block-container {
+                        max-width: 50%;
+                    }
+                </style>
+                """,
+                unsafe_allow_html=True
+            )
 
-        current_df = df[(df['published_date'] >= current_month)]
-        previous_df = df[(df['published_date'] >= previous_month) & (df['published_date'] < current_month)]
+        with col3:
+            # Query to retrieve salary data
+            query = f"""
+            select * FROM `{project_id}.money_diaries.analytics_categories_over_time`
+            """
+            # Execute the query and convert the results to a Pandas DataFrame
+            df = pd.DataFrame(run_query(query))
 
-        # averages
-        cur_avg = current_df.mean(numeric_only=True).round().to_dict()
-        pre_avg = previous_df.mean(numeric_only=True).round().to_dict()
+            # Convert 'published_date' to datetime
+            df = df[df['food_drink'].notnull()] # remove this line after implementing google vision extraction 
+            df['published_date'] = pd.to_datetime(df['published_date'])
+            current_month = df['published_date'].max() - pd.DateOffset(months=1)
+            previous_month = current_month - pd.DateOffset(months=1)
 
-        # create three columns
-        st.markdown("### Prices (per week)")
-        kpi1, kpi2, kpi3 = st.columns(3)
+            current_df = df[(df['published_date'] >= current_month)]
+            previous_df = df[(df['published_date'] >= previous_month) & (df['published_date'] < current_month)]
 
-        # fill in those three columns with respective metrics or KPIs 
-        kpi1.metric(label="Food + Drink 🍔🥤", value=f"$ {cur_avg['food_drink']}", delta=cur_avg['food_drink']-pre_avg['food_drink'])
-        kpi2.metric(label="Entertainment 🎡", value=f"$ {cur_avg['entertainment']}", delta=cur_avg['entertainment']-pre_avg['entertainment'])
-        kpi3.metric(label="Home + Health 🏠💊", value=f"$ {cur_avg['home_health']}", delta=cur_avg['home_health']-pre_avg['home_health'])
+            # averages
+            cur_avg = current_df.mean(numeric_only=True).round().to_dict()
+            pre_avg = previous_df.mean(numeric_only=True).round().to_dict()
 
-        # create three columns
-        kpi4, kpi5, kpi6 = st.columns(3)
+            # create three columns
+            st.markdown("### Prices (per week)")
+            kpi1, kpi2, kpi3 = st.columns(3)
 
-        # fill in those three columns with respective metrics or KPIs 
-        kpi4.metric(label="Clothes + Beauty 👗💅", value=f"$ {cur_avg['clothes_beauty']}", delta=cur_avg['clothes_beauty']-pre_avg['clothes_beauty'])
-        kpi5.metric(label="Transportation 🛻", value=f"$ {cur_avg['transportation']}", delta=cur_avg['transportation']-pre_avg['transportation'])
-        kpi6.metric(label="Other 🟣", value=f"$ {cur_avg['other']}", delta=cur_avg['other']-pre_avg['other'])
+            # fill in those three columns with respective metrics or KPIs 
+            kpi1.metric(label="Food + Drink 🍔🥤", value=f"$ {cur_avg['food_drink']}", delta=cur_avg['food_drink']-pre_avg['food_drink'])
+            kpi2.metric(label="Entertainment 🎡", value=f"$ {cur_avg['entertainment']}", delta=cur_avg['entertainment']-pre_avg['entertainment'])
+            kpi3.metric(label="Home + Health 🏠💊", value=f"$ {cur_avg['home_health']}", delta=cur_avg['home_health']-pre_avg['home_health'])
+
+            # create three columns
+            kpi4, kpi5, kpi6 = st.columns(3)
+
+            # fill in those three columns with respective metrics or KPIs 
+            kpi4.metric(label="Clothes + Beauty 👗💅", value=f"$ {cur_avg['clothes_beauty']}", delta=cur_avg['clothes_beauty']-pre_avg['clothes_beauty'])
+            kpi5.metric(label="Transportation 🛻", value=f"$ {cur_avg['transportation']}", delta=cur_avg['transportation']-pre_avg['transportation'])
+            kpi6.metric(label="Other 🟣", value=f"$ {cur_avg['other']}", delta=cur_avg['other']-pre_avg['other'])
 
         fig_col1, fig_col2 = st.columns(2)
         with fig_col1:
@@ -179,7 +203,7 @@ if __name__ == "__main__":
             facet = alt.vconcat(alt.hconcat(*charts[:3], spacing=20), alt.hconcat(*charts[3:], spacing=20), spacing=20)
             st.write(facet)
 
-        col1, col2, col3 = st.columns([1, 2, 1])
+        col1, col2, col3 = st.columns([0.7, 1, 1])
         with col2:
             # Query to retrieve salary data
             query = f"""
