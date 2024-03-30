@@ -110,11 +110,11 @@ resource "google_cloud_run_service" "run_service" {
           value = 16384
         }
         env {
-          name = "path_to_keyfile"
+          name  = "path_to_keyfile"
           value = "/secrets/bigquery/bigquery_credentials"
         }
         env {
-          name = "project_id"
+          name  = "project_id"
           value = var.project_id
         }
         volume_mounts {
@@ -125,7 +125,7 @@ resource "google_cloud_run_service" "run_service" {
       volumes {
         name = "secret-bigquery-key"
         secret {
-          secret_name  = "bigquery_credentials"
+          secret_name = "bigquery_credentials"
           items {
             key  = "latest"
             path = "bigquery_credentials"
@@ -166,8 +166,8 @@ resource "google_cloud_run_service" "run_service" {
 
 # Create a Bigquery dataset 
 resource "google_bigquery_dataset" "demo_dataset" {
-  dataset_id = var.bq_dataset_name
-  location   = var.location
+  dataset_id                 = var.bq_dataset_name
+  location                   = var.location
   delete_contents_on_destroy = true
 }
 
