@@ -13,3 +13,4 @@ dbt/neon/.user.yml
 dbt/neon/package-lock.yml
 streamlit-moneydiaries/.streamlit
 .ipynb_checkpoints/
+cpi/.env
