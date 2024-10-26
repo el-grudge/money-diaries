@@ -5,3 +5,4 @@ SQLAlchemy
 streamlit
 asyncpg
 python-dotenv
+nest-asyncio
