@@ -78,5 +78,29 @@ To recreate this dashboard, follow the instructions [here](./docs/instructions.m
 1. Create a streaming pipeline that extracts new posts
 2. Create unit tests for all steps
 3. Build a second pipeline that uses OCR to extract breakdown data (the scrapped data has a lot of null values)
-4. Add filters to the dashoard
+4. Add filters and slicers to the dashoard
 5. Use the stored data to build a financial RAG 
+6. Store reactions to enrich the data
+
+## Todo
+
+- [ ] notes on [mage debugging](#debuging-mage)
+- [ ] seed official inflation records
+- [ ] use cpi code to calculate oral inflation
+- [ ] move debt-wealth chart to fig 1 
+- [ ] add official-vs-oral inflation chart
+- [ ] use google image extraction api to extract data from images when not available in scraped data
+- [ ] modify dbt model to accommodate image extractions and inflation seeds
+- [ ] data governance in dbt: 1- add metadata to enhance discoverability
+- [ ] data governance in dbt: 2- add data quality checks to enhance data quality and integrity
+- [ ] run the project on a longer period and ensure that it is working smoothly
+
+#### debuging mage
+
+fails when pipeline run with trigger
+succeeds when executed step-by-step
+unclear error message:
+
+`"Pipeline execution failed at stage sync with exception:\n\n<class 'dlt.destinations.exceptions.DatabaseTransientException'>\nSSL SYSCALL error: EOF detected\n")`
+
+<img src="./images/mage_error_msg.png" alt="dataset" width="750"/>
