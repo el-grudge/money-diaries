@@ -14,3 +14,4 @@ dbt/neon/package-lock.yml
 streamlit-moneydiaries/.streamlit
 .ipynb_checkpoints/
 cpi/.env
+streamlit-moneydiaries/__pycache__/

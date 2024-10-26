@@ -6,6 +6,7 @@ from sqlalchemy.ext.asyncio import create_async_engine
 import streamlit as st
 import pandas as pd
 import altair as alt
+from utils import get_official_cpi, calculate_user_response_cpi
 
 
 @st.cache_data(ttl=600)
@@ -239,5 +240,55 @@ if __name__ == "__main__":
 
             
         with col2:
-            ...
-            st.write('placeholder for inflation chart')
+            official_cpi_df = get_official_cpi()
+
+            user_response_cpi_df = calculate_user_response_cpi()
+
+            # Step 3: Reindex the official DataFrame to align with the user-reported dates
+            # Forward-fill to get official CPI on last day of month
+            official_cpi_df = official_cpi_df.reindex(user_response_cpi_df.index, method='ffill')
+
+            # Convert indexes to columns for Altair
+            official_cpi_df = official_cpi_df.reset_index()
+            user_response_cpi_df = user_response_cpi_df.reset_index()
+
+
+            # Define the colors
+            official_color = '#182760'  # Dark blue color for 'net_worth'
+            user_reported_color = '#fb08d3'       # Pink color for 'debt'
+
+
+            # Create a line with points for the official inflation data
+            official_chart = alt.Chart(official_cpi_df).mark_line(color=official_color).encode(
+                x=alt.X('published_date:T', title='Date', axis=alt.Axis(labelAngle=-45)),
+                y=alt.Y('MoM_Inflation:Q', title='Monthly Inflation Rate'),
+                tooltip=['published_date:T', 'MoM_Inflation']
+            ).properties(
+                title='Inflation Rate Comparison: Official vs User Reported'
+            ) + alt.Chart(official_cpi_df).mark_point(color=official_color, shape='circle').encode(
+                x='published_date:T',
+                y='MoM_Inflation:Q'
+            )
+
+            # Create a line with points for the user-reported inflation data
+            user_chart = alt.Chart(user_response_cpi_df).mark_line(color=user_reported_color).encode(
+                x=alt.X('published_date:T', title='Date', axis=alt.Axis(labelAngle=-45)),
+                y=alt.Y('Inflation_Rate:Q', title='Monthly Inflation Rate'),
+                tooltip=['published_date:T', 'Inflation_Rate']
+            ) + alt.Chart(user_response_cpi_df).mark_point(color=user_reported_color, shape='cross').encode(
+                x='published_date:T',
+                y='Inflation_Rate:Q'
+            )
+
+            # Layer the two charts
+            chart = alt.layer(official_chart, user_chart).resolve_scale(
+                color='independent'
+            ).properties(
+                width=850, height=650
+            ).configure_legend(
+                title=None
+            ).configure_axis(
+                grid=True
+            )
+
+            st.write(chart)
