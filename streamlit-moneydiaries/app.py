@@ -292,7 +292,7 @@ if __name__ == "__main__":
             title_html = f"""
             <h3 style='text-align: center;'>
                 Inflation Rate Comparison: 
-                <span style='color:{official_color}'>'Official'</span> vs. 
+                <span style='color:{official_color}'>Official</span> vs. 
                 <span style='color:{user_reported_color}'>User Reported</span> per age group
             </h3>
             """
