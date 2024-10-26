@@ -48,7 +48,7 @@ The ingested data is stored in a BigQuery data warehouse. dbt transformations an
 
 <img src="./images/dbt-pipeline.png" alt="dbt" width="750"/>
 
-dbt is used to create optimized tables that host the data that will be used by the dashboard. For more details on how to partition and cluster tables in dbt check the [README](../dbt/README.md) page under the dbt directory. 
+dbt is used to create optimized tables that host the data that will be used by the dashboard. For more details on how to partition and cluster tables in dbt check the [README](dbt/README.md) page under the dbt directory. 
 
 Also, dbt creates three reporting views that will be used by the dashboard. 
 

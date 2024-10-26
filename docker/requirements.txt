@@ -2,7 +2,7 @@ astunparse==1.6.3
 certifi==2024.2.2
 charset-normalizer==3.3.2
 click==8.1.7
-dlt==0.4.4
+dlt[postgres]==0.4.4
 duckdb==0.9.2
 fsspec==2024.2.0
 gitdb==4.0.11
@@ -48,4 +48,4 @@ proto-plus==1.23.0
 protobuf==4.25.3
 pyasn1==0.5.1
 pyasn1-modules==0.3.0
-
+psycopg2

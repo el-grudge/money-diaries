@@ -1,3 +1,4 @@
+#### BigQuery
 The Dockerfile [`moneydiaries.dockerfile`](moneydiaries.dockerfile) creates an image based on Mage.ai. Two more things are added to it:
 
 1. The [`dlt`](https://dlthub.com/) package
@@ -27,4 +28,32 @@ docker push [gcp_region]-docker.pkg.dev/[project_id]/[repository_name]/[property
 ```
 
 
+#### Postgres on NEON
+To use Postgres on NEON instead of BigQuery, follow these steps:
 
+1. Create an account on NEON ([here](https://console.neon.tech/realms/prod-realm/protocol/openid-connect/registrations?client_id=neon-console&redirect_uri=https%3A%2F%2Fconsole.neon.tech%2Fauth%2Fkeycloak%2Fcallback&response_type=code&scope=openid+profile+email&state=NR-FzJYd9UBjtZhRVjq-uA%3D%3D%2C%2C%2C))
+2. Create a project called money-diaries
+3. The schema name should be money_diaries
+
+Next, go to the Dashboard tab and copy the connection parameters, which can be found under "Connection Details".
+
+To run a docker container that connects Mage with Postgres on NEON use the following command:
+
+```bash
+docker run \
+    -d \
+    -p 6789:6789 \
+    -e NEON_HOST=<hostname> \
+    -e NEON_DB='money_diaries' \
+    -e NEON_USER=<username> \
+    -e NEON_PASSWORD=<password> \
+    --name mage_container \
+    -v $(pwd)/mage_data:/home/mage_code/money_diaries \
+    moneydiaries:mage
+```
+
+To delete a docker container with the same name use this command:
+
+```bash
+docker rm mage_container
+```

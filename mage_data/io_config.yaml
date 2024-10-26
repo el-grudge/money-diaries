@@ -72,12 +72,13 @@ default:
   PINOT_SCHEME: http
   PINOT_USER: user
   # PostgresSQL
+  POSTGRES_CONNECTION_URL: "postgresql://{{ env_var('NEON_USER') }}:{{ env_var('NEON_PASSWORD') }}@{{ env_var('NEON_HOST') }}/{{ env_var('NEON_DB') }}?sslmode=require"
   POSTGRES_CONNECT_TIMEOUT: 10
-  POSTGRES_DBNAME: postgres
+  POSTGRES_DBNAME: "{{ env_var('NEON_DB') }}"
   POSTGRES_SCHEMA: public # Optional
-  POSTGRES_USER: username
-  POSTGRES_PASSWORD: password
-  POSTGRES_HOST: hostname
+  POSTGRES_USER: "{{ env_var('NEON_USER') }}"
+  POSTGRES_PASSWORD: "{{ env_var('NEON_PASSWORD') }}"
+  POSTGRES_HOST: "{{ env_var('NEON_HOST') }}"
   POSTGRES_PORT: 5432
   # Qdrant
   QDRANT_COLLECTION: collection

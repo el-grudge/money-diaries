@@ -1,0 +1,14 @@
+.venv/
+.env
+mage_data/.file_versions
+mage_data/.ssh_tunnel
+mage_data/metadata.yaml
+mage_data/*/__pycache__/
+mage_data/pipelines/money_diaries_neon/__pycache__/
+mage_data/pipelines/money_diaries_neon/__init__.py
+dbt/neon/logs
+dbt/neon/target
+dbt/neon/dbt_packages
+dbt/neon/.user.yml
+dbt/neon/package-lock.yml
+streamlit-moneydiaries/.streamlit

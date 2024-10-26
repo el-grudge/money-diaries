@@ -213,15 +213,30 @@ https://www.googleapis.com/auth/drive.readonly,\
 https://www.googleapis.com/auth/iam.test
 ```
 
-- **Initiate dbt**
+Alternatively, if you'll be running dbt with Postgres, export the following environment variables:
 
 ```bash
-cd ../dbt
+export NEON_HOST=<hostname>
+export NEON_DB=<database>
+export NEON_USER=<username>
+export NEON_PASSWORD=<password>
+```
+
+- **Initiate dbt**
+
+BigQuery
+
+```bash
+cd ../dbt/bigquery
 dbt init
 ```
-tip about my_bigquery_profile
-....
 
+Postgres on NEON
+
+```bash
+cd ../dbt/neon
+dbt init
+```
 
 - **Install dbt packages**
 
@@ -250,9 +265,9 @@ dbt run --vars '{'is_test_run': 'false'}'
 Rename the streamlit directory
 
 ```bash
+cd ../../
 mv secrets.streamlit .streamlit
 ```
-
 
 The .streamlit directory has the secrets.toml file which contains the Google cloud credentials that will be used to connect to BigQuery.
 
@@ -272,6 +287,9 @@ auth_uri = "https://accounts.google.com/o/oauth2/auth"
 token_uri = "https://oauth2.googleapis.com/token"
 auth_provider_x509_cert_url = "https://www.googleapis.com/oauth2/v1/certs"
 client_x509_cert_url = "xxx"
+
+[neon]
+DATABASE_URL='<postgres connection string>'
 ```
 
 - **Run**
@@ -280,7 +298,14 @@ Run the streamlit app to launch the dashboard. This command has to be executed f
 
 ```bash
 cd ../
-streamlit run streamlit-moneydiaries/app.py
+streamlit run streamlit-moneydiaries/app_bigquery.py
+```
+
+Or
+
+```bash
+cd ../
+streamlit run streamlit-moneydiaries/app_neon.py
 ```
 
 To view the dashboard, go to https://localhost:8501
