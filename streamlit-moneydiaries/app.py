@@ -1,4 +1,3 @@
-import os
 import asyncio
 from sqlalchemy import text
 from urllib.parse import urlparse
