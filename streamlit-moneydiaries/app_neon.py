@@ -183,8 +183,8 @@ if __name__ == "__main__":
             facet = alt.vconcat(alt.hconcat(*charts[:3], spacing=20), alt.hconcat(*charts[3:], spacing=20), spacing=20)
             st.write(facet)
 
-        col1, col2, col3 = st.columns([0.7, 1, 1])
-        with col2:
+        col1, col2 = st.columns(2)
+        with col1:
             # Query to retrieve salary data
             query = f"""
             select * FROM money_diaries.analytics_debt_worth
@@ -199,14 +199,22 @@ if __name__ == "__main__":
 
             df_melted = df[col_names].melt(id_vars='age_group', var_name='category', value_name='value').groupby(['age_group', 'category']).agg({'value': 'mean'}).reset_index()
 
-            title = 'Net worth / debt per age group'
-            subtitle = 'Debt' + ' '*10 + 'Net Wealth'
+            # Define the colors
+            debt_color = '#fb08d3'       # Pink color for 'debt'
+            net_worth_color = '#182760'  # Dark blue color for 'net_worth'
 
             # Create the chart
             chart = alt.Chart(df_melted).mark_bar().encode(
                 x=alt.X('value:Q', axis=alt.Axis(title='Value')),
                 y=alt.Y('age_group:N', axis=alt.Axis(title='Age Group')),
-                color=alt.Color('category:N', scale=alt.Scale(domain=['net_worth', 'debt'], range=['#182760', '#fb08d3']), legend=None),
+                color=alt.Color(
+                    'category:N', 
+                    scale=alt.Scale(
+                        domain=['net_worth', 'debt'], 
+                        range=[net_worth_color, debt_color]
+                    ), 
+                    legend=None
+                ),
                 tooltip=['value:Q']
             ).properties(
                 width=850,
@@ -215,11 +223,21 @@ if __name__ == "__main__":
                 grid=False
             )
 
-            # Combine chart and text
-            divergent_bar_chart = (chart)
+            # Define the title with colored words
+            title_html = f"""
+            <h3 style='text-align: center;'>
+                <span style='color:{debt_color}'>Debt</span> vs. 
+                <span style='color:{net_worth_color}'>Net Worth</span> per age group
+            </h3>
+            """
 
-            # Show the chart
-            title = 'Net worth / debt per age group'
-            st.markdown(f"<h3 style='text-align: center;'>{title}</h1>", unsafe_allow_html=True)  # Center-align 
+            # Display the title
+            st.markdown(title_html, unsafe_allow_html=True)
+
+            # Display the chart
             st.altair_chart(chart, use_container_width=True)
+
             
+        with col2:
+            ...
+            st.write('placeholder for inflation chart')

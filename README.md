@@ -87,13 +87,15 @@ To recreate this dashboard, follow the instructions [here](./docs/instructions.m
 - [ ] notes on [mage debugging](#debuging-mage)
 - [ ] seed official inflation records
 - [ ] use cpi code to calculate oral inflation
-- [ ] move debt-wealth chart to fig 1 
+- [x] move debt-wealth chart to fig 1 
 - [ ] add official-vs-oral inflation chart
-- [ ] use google image extraction api to extract data from images when not available in scraped data
+- [ ] use google ocr api to extract data from images when not available in scraped data
 - [ ] modify dbt model to accommodate image extractions and inflation seeds
 - [ ] data governance in dbt: 1- add metadata to enhance discoverability
 - [ ] data governance in dbt: 2- add data quality checks to enhance data quality and integrity
 - [ ] run the project on a longer period and ensure that it is working smoothly
+- [x] fix net worth regex
+- [ ] net worth calculation: use net worth if exists, else use assets to calculate net worth
 
 #### debuging mage
 
