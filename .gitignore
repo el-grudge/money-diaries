@@ -12,3 +12,4 @@ dbt/neon/dbt_packages
 dbt/neon/.user.yml
 dbt/neon/package-lock.yml
 streamlit-moneydiaries/.streamlit
+.ipynb_checkpoints/
