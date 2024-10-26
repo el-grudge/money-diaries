@@ -262,8 +262,6 @@ if __name__ == "__main__":
                 x=alt.X('published_date:T', title='Date', axis=alt.Axis(labelAngle=-45)),
                 y=alt.Y('MoM_Inflation:Q', title='Monthly Inflation Rate'),
                 tooltip=['published_date:T', 'MoM_Inflation']
-            ).properties(
-                title='Inflation Rate Comparison: Official vs User Reported'
             ) + alt.Chart(official_cpi_df).mark_point(color=official_color, shape='circle').encode(
                 x='published_date:T',
                 y='MoM_Inflation:Q'
@@ -290,4 +288,17 @@ if __name__ == "__main__":
                 grid=True
             )
 
-            st.write(chart)
+            # Define the title with colored words
+            title_html = f"""
+            <h3 style='text-align: center;'>
+                Inflation Rate Comparison: 
+                <span style='color:{official_color}'>'Official'</span> vs. 
+                <span style='color:{user_reported_color}'>User Reported</span> per age group
+            </h3>
+            """
+
+            # Display the title
+            st.markdown(title_html, unsafe_allow_html=True)
+
+            # Display the chart
+            st.altair_chart(chart, use_container_width=True)
