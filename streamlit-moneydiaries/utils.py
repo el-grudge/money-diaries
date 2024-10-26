@@ -1,9 +1,7 @@
 import requests
 import json
 import pandas as pd
-import matplotlib.pyplot as plt
 from datetime import datetime
-import os
 import asyncio
 from sqlalchemy import text
 from dotenv import load_dotenv
