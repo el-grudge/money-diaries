@@ -128,7 +128,7 @@ def get_official_cpi():
     df['YoY_Inflation'] = df['CPI'].pct_change(periods=12) * 100
 
     start_date = '2021-11-01'
-    end_date = '2022-02-01'
+    end_date = '2024-10-01'
     filtered_df = df.loc[start_date:end_date]
 
     return filtered_df
@@ -142,6 +142,7 @@ def calculate_user_response_cpi():
     """
     # Execute the query and convert the results to a Pandas DataFrame
     df = pd.DataFrame(run_query(query))
+    df = df.dropna(how='any')
     df['published_date'] = pd.to_datetime(df['published_date'])
     col_names = ['published_date', 'food_drink', 'entertainment', 'home_health', 'clothes_beauty', 'transportation', 'other']
     df = df[col_names]

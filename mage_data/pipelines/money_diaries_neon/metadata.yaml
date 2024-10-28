@@ -45,7 +45,11 @@ blocks:
     data_provider: postgres
     data_provider_profile: default
     export_write_policy: append
-  downstream_blocks: []
+  downstream_blocks:
+  - dbt/money_diaries/models/staging/stg_blog_basic_information
+  - dbt/money_diaries/models/staging/stg_blog_contents
+  - dbt/money_diaries/models/staging/stg_blog_entries
+  - dbt/money_diaries/models/staging/stg_blog_expense_report
   executor_config: null
   executor_type: local_python
   has_callback: false
@@ -58,6 +62,196 @@ blocks:
   upstream_blocks:
   - get_blog_urls_neon
   uuid: export_blogs_neon
+- all_upstream_blocks_executed: true
+  color: null
+  configuration:
+    dbt: {}
+    dbt_profile_target: dev
+    dbt_project_name: dbt/money_diaries
+    disable_query_preprocessing: false
+    export_write_policy: append
+    file_path: dbt/money_diaries/models/staging/stg_blog_basic_information.sql
+    file_source:
+      path: dbt/money_diaries/models/staging/stg_blog_basic_information.sql
+      project_path: dbt/money_diaries
+    limit: 1000
+    use_raw_sql: false
+  downstream_blocks:
+  - dbt/money_diaries/models/core/reporting_blog_content_metrics
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: sql
+  name: stg_blog_basic_information
+  retry_config: null
+  status: executed
+  timeout: null
+  type: dbt
+  upstream_blocks:
+  - export_blogs_neon
+  uuid: dbt/money_diaries/models/staging/stg_blog_basic_information
+- all_upstream_blocks_executed: true
+  color: null
+  configuration:
+    dbt_project_name: dbt/money_diaries
+    file_path: dbt/money_diaries/models/staging/stg_blog_contents.sql
+    file_source:
+      path: dbt/money_diaries/models/staging/stg_blog_contents.sql
+      project_path: dbt/money_diaries
+  downstream_blocks:
+  - dbt/money_diaries/models/core/reporting_blog_content_metrics
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: sql
+  name: stg_blog_contents
+  retry_config: null
+  status: executed
+  timeout: null
+  type: dbt
+  upstream_blocks:
+  - export_blogs_neon
+  uuid: dbt/money_diaries/models/staging/stg_blog_contents
+- all_upstream_blocks_executed: true
+  color: null
+  configuration:
+    dbt: {}
+    dbt_profile_target: dev
+    dbt_project_name: dbt/money_diaries
+    disable_query_preprocessing: false
+    export_write_policy: append
+    file_path: dbt/money_diaries/models/staging/stg_blog_entries.sql
+    file_source:
+      path: dbt/money_diaries/models/staging/stg_blog_entries.sql
+      project_path: dbt/money_diaries
+    limit: 1000
+    use_raw_sql: false
+  downstream_blocks:
+  - dbt/money_diaries/models/core/reporting_blog_content_metrics
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: sql
+  name: stg_blog_entries
+  retry_config: null
+  status: executed
+  timeout: null
+  type: dbt
+  upstream_blocks:
+  - export_blogs_neon
+  uuid: dbt/money_diaries/models/staging/stg_blog_entries
+- all_upstream_blocks_executed: true
+  color: null
+  configuration:
+    dbt_project_name: dbt/money_diaries
+    file_path: dbt/money_diaries/models/staging/stg_blog_expense_report.sql
+    file_source:
+      path: dbt/money_diaries/models/staging/stg_blog_expense_report.sql
+      project_path: dbt/money_diaries
+  downstream_blocks:
+  - dbt/money_diaries/models/core/reporting_blog_content_metrics
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: sql
+  name: stg_blog_expense_report
+  retry_config: null
+  status: executed
+  timeout: null
+  type: dbt
+  upstream_blocks:
+  - export_blogs_neon
+  uuid: dbt/money_diaries/models/staging/stg_blog_expense_report
+- all_upstream_blocks_executed: true
+  color: null
+  configuration:
+    dbt_project_name: dbt/money_diaries
+    file_path: dbt/money_diaries/models/core/reporting_blog_content_metrics.sql
+    file_source:
+      path: dbt/money_diaries/models/core/reporting_blog_content_metrics.sql
+      project_path: dbt/money_diaries
+  downstream_blocks:
+  - dbt/money_diaries/models/reporting/analytics_salaries
+  - dbt/money_diaries/models/reporting/analytics_debt_worth
+  - dbt/money_diaries/models/reporting/analytics_categories_over_time
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: sql
+  name: reporting_blog_content_metrics
+  retry_config: null
+  status: executed
+  timeout: null
+  type: dbt
+  upstream_blocks:
+  - dbt/money_diaries/models/staging/stg_blog_entries
+  - dbt/money_diaries/models/staging/stg_blog_contents
+  - dbt/money_diaries/models/staging/stg_blog_expense_report
+  - dbt/money_diaries/models/staging/stg_blog_basic_information
+  uuid: dbt/money_diaries/models/core/reporting_blog_content_metrics
+- all_upstream_blocks_executed: true
+  color: null
+  configuration:
+    dbt_project_name: dbt/money_diaries
+    file_path: dbt/money_diaries/models/reporting/analytics_categories_over_time.sql
+    file_source:
+      path: dbt/money_diaries/models/reporting/analytics_categories_over_time.sql
+      project_path: dbt/money_diaries
+  downstream_blocks: []
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: sql
+  name: analytics_categories_over_time
+  retry_config: null
+  status: executed
+  timeout: null
+  type: dbt
+  upstream_blocks:
+  - dbt/money_diaries/models/core/reporting_blog_content_metrics
+  uuid: dbt/money_diaries/models/reporting/analytics_categories_over_time
+- all_upstream_blocks_executed: true
+  color: null
+  configuration:
+    dbt_project_name: dbt/money_diaries
+    file_path: dbt/money_diaries/models/reporting/analytics_debt_worth.sql
+    file_source:
+      path: dbt/money_diaries/models/reporting/analytics_debt_worth.sql
+      project_path: dbt/money_diaries
+  downstream_blocks: []
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: sql
+  name: analytics_debt_worth
+  retry_config: null
+  status: executed
+  timeout: null
+  type: dbt
+  upstream_blocks:
+  - dbt/money_diaries/models/core/reporting_blog_content_metrics
+  uuid: dbt/money_diaries/models/reporting/analytics_debt_worth
+- all_upstream_blocks_executed: true
+  color: null
+  configuration:
+    dbt_project_name: dbt/money_diaries
+    file_path: dbt/money_diaries/models/reporting/analytics_salaries.sql
+    file_source:
+      path: dbt/money_diaries/models/reporting/analytics_salaries.sql
+      project_path: dbt/money_diaries
+  downstream_blocks: []
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: sql
+  name: analytics_salaries
+  retry_config: null
+  status: executed
+  timeout: null
+  type: dbt
+  upstream_blocks:
+  - dbt/money_diaries/models/core/reporting_blog_content_metrics
+  uuid: dbt/money_diaries/models/reporting/analytics_salaries
 cache_block_output_in_memory: false
 callbacks: []
 concurrency_config: {}

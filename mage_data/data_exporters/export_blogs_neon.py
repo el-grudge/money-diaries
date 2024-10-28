@@ -6,10 +6,13 @@ if 'data_exporter' not in globals():
     from mage_ai.data_preparation.decorators import data_exporter
 
 def get_json_from_url(blog_url, params = {'json': 'true'}):
-    # get blog entries
-    response = requests.get(blog_url, params=params)
-    response.raise_for_status()  # Raise an HTTPError for bad responses
-    return response.json()
+    try:
+        response = requests.get(blog_url, params=params, timeout=10)  # Added timeout
+        response.raise_for_status()
+        return response.json()
+    except:
+        print(f"Failed to fetch data from {blog_url}")
+        return None
 
 @data_exporter
 def export_data(data, *args, **kwargs):

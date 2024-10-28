@@ -1,0 +1,7 @@
+version: 2
+
+models:
+  - name: analytics_categories_over_time
+    description: divergent bar chart
+  - name: analytics_debt_worth
+  - name: analytics_salaries

@@ -12,7 +12,9 @@ The blog is a rich source of data for anyone who wants to learn about how money 
 
 ### Data flow chart
 
-The data flow works as follows:
+#### BigQuery
+
+When running the project with BigQuery, the data flow works as follows:
 
 1. Terraform is used to deploy two resources: a Cloud Run Service and a BigQuery dataset
 2. The Cloud Run services deploys a docker image that contains Mage.ai and dlt
@@ -21,6 +23,17 @@ The data flow works as follows:
 5. The dashboard is built with Streamlit. It queries the reporting tables and visualizes the data
 
 <img src="./images/pipeline-bg.png" alt="dataset" width="750"/>
+
+#### PostgreSQL on NEON
+
+When running the project with PostgreSQL on NEON, the data flow works as follows:
+
+1. The data is ingested from the blog using dlt and is stored in PostgreSQL
+2. dbt is used to optimize and transform the data and to create three reporting views that will be used by the dashboard
+5. The dashboard is built with Streamlit. It queries the reporting tables and visualizes the data
+
+<img src="./images/pipeline-postgre.png" alt="dataset" width="750"/>
+
 
 ## Cloud
 The following cloud resources are provisioned using Terraform:
@@ -84,18 +97,22 @@ To recreate this dashboard, follow the instructions [here](./docs/instructions.m
 
 ## Todo
 
+- [ ] ocr on mage
+- [ ] move cpi to mage
 - [ ] notes on [mage debugging](#debuging-mage)
 - [ ] seed official inflation records
-- [ ] use cpi code to calculate oral inflation
-- [x] move debt-wealth chart to fig 1 
-- [ ] add official-vs-oral inflation chart
 - [ ] use google ocr api to extract data from images when not available in scraped data
 - [ ] modify dbt model to accommodate image extractions and inflation seeds
 - [ ] data governance in dbt: 1- add metadata to enhance discoverability
 - [ ] data governance in dbt: 2- add data quality checks to enhance data quality and integrity
-- [ ] run the project on a longer period and ensure that it is working smoothly
-- [x] fix net worth regex
+- [ ] fix net worth regex on mage
 - [ ] net worth calculation: use net worth if exists, else use assets to calculate net worth
+- [x] move dbt to mage
+- [x] use cpi code to calculate oral inflation
+- [x] move debt-wealth chart to fig 1 
+- [x] add official-vs-oral inflation chart
+- [x] run the project on a longer period and ensure that it is working smoothly
+- [x] fix net worth regex
 
 #### debuging mage
 

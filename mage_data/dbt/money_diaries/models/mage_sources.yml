@@ -1,0 +1,14 @@
+sources:
+- description: Dataframes Mage upstream blocks
+  loader: mage
+  name: mage_money_diaries
+  schema: money_diaries
+  tables:
+  - description: Dataframe for block `export_blogs_neon` of the `money_diaries_neon`
+      mage pipeline.
+    identifier: mage_money_diaries_neon_export_blogs_neon
+    meta:
+      block_uuid: export_blogs_neon
+      pipeline_uuid: money_diaries_neon
+    name: money_diaries_neon_export_blogs_neon
+version: 2

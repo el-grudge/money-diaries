@@ -8,7 +8,7 @@ if 'test' not in globals():
     from mage_ai.data_preparation.decorators import test
 
 def paginated_getter(BASE_API_URL, blog_main_url, n_pages=15):
-    page_number = 15
+    page_number = 0
 
     while page_number <= n_pages:
         # Set the query parameters
@@ -53,7 +53,7 @@ def load_data(*args, **kwargs):
         credentials=postgres_connection_url
         )
     
-    n_pages=15
+    n_pages=99
     pipeline.run(
         paginated_getter(BASE_API_URL, blog_main_url, n_pages=n_pages), 
         table_name="diary_links", 
