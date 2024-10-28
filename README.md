@@ -97,6 +97,7 @@ To recreate this dashboard, follow the instructions [here](./docs/instructions.m
 
 ## Todo
 
+- [ ] review the numbers
 - [ ] ocr on mage
 - [ ] move cpi to mage
 - [ ] notes on [mage debugging](#debuging-mage)
